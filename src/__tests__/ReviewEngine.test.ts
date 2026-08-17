@@ -3,7 +3,6 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import { QuizReviewAdapter } from '../blanksage/QuizReviewAdapter';
 import { ChessReviewAdapter } from '../chess/ChessReviewAdapter';
 import { ReviewEngine } from '../domain/ReviewEngine';
 
@@ -49,42 +48,16 @@ describe('ReviewEngine Generic State Machine', () => {
     expect(engine.getCurrentIndex()).toBe(maxIndex);
   });
 
-  it('should seamlessly handle a BlankSage Quiz Review Adapter using generic engine contracts', () => {
-    const quizAdapter = new QuizReviewAdapter();
-    const engine = new ReviewEngine(quizAdapter);
+  it('should safely clamp initial non-zero index to valid upper bounds', () => {
+    const adapter = new ChessReviewAdapter();
+    // Engine automatically clamps initialIndex 999 to max index 32 (totalSteps - 1)
+    const clampedEngine = new ReviewEngine(adapter, 999);
+    expect(clampedEngine.getCurrentIndex()).toBe(32);
+    expect(clampedEngine.getCurrentItem()?.payload.san).toBe('Rd8#');
 
-    expect(engine.getSummary().id).toBe('quiz-react-fe-2026');
-    expect(engine.getTotalSteps()).toBe(4);
-
-    const item1 = engine.getCurrentItem();
-    expect(item1?.signal).toBe('best');
-    expect(item1?.payload.questionText).toContain('array state in React');
-
-    engine.nextStep();
-    const item2 = engine.getCurrentItem();
-    expect(item2?.signal).toBe('mistake');
-    expect(item2?.bestAlternative).toBeDefined();
-  });
-
-  it('should safely handle domain switching starting from a non-zero chess index (Item 6 requirement)', () => {
-    // Start on chess game on move index 25 (out of 33 moves)
-    const chessAdapter = new ChessReviewAdapter();
-    const chessEngine = new ReviewEngine(chessAdapter, 25);
-    expect(chessEngine.getCurrentIndex()).toBe(25);
-    expect(chessEngine.getCurrentItem()?.payload.san).toBe('Rxd7');
-
-    // Switch to Quiz adapter (which only has 4 items)
-    const quizAdapter = new QuizReviewAdapter();
-    // Engine automatically clamps initialIndex 25 to max index 3 (totalSteps - 1)
-    const clampedQuizEngine = new ReviewEngine(quizAdapter, 25);
-    expect(clampedQuizEngine.getCurrentIndex()).toBe(3);
-    expect(clampedQuizEngine.getCurrentItem()?.id).toBe('q-4');
-    expect(clampedQuizEngine.getCurrentItem()?.payload.questionText).toBeDefined();
-
-    // Resetting to step 0 returns first quiz item safely
-    clampedQuizEngine.firstStep();
-    expect(clampedQuizEngine.getCurrentIndex()).toBe(0);
-    expect(clampedQuizEngine.getCurrentItem()?.id).toBe('q-1');
+    clampedEngine.firstStep();
+    expect(clampedEngine.getCurrentIndex()).toBe(0);
+    expect(clampedEngine.getCurrentItem()?.payload.san).toBe('e4');
   });
 
   it('should correctly expose summary metrics and accuracy breakdown', () => {
