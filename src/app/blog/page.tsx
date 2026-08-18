@@ -19,6 +19,21 @@ After the website was made through an app called Antigravity I had created the s
 
 then after it was all done I had deployed the website using vercel which is a cloud platform that helps developers build , host and scale fast websites and web applications.
 
+The Blanksage submission folder contains two important sub folders which is the src/ and the docs/.
+The docs/ folder contains the documents which was asked in section 6 of the prd ,these documents are 
+the planning and implementation plan
+ai transcripts and prompts 
+agent handoffs and summaries
+tradeoffs and debugging decisions.
+
+The other folder src contains important files like tests, apps, blanksage, chess, components, domain, and hooks each of these files help the website in a way.
+-The domain file contains the core typescript interfaces and all the feedback review the moves review and the step counter and summaries hare coded in this file.
+-the chess file contains the dataset for the Morphy's 1858 Opera Game (33 moves) with feedback,
+-the components file contains the ui(user interface) that is all the things we see and interact with in the website is coded in this file. Like the chessboard , the pieces , the moves buttons etc.
+-the app file which contains the main homepage assembling all the ui components, the blog route page.
+- the hooks file connects the state machine to React components. Exposes current Item , navigation State, next Step, previous Step, goToStep, first Step, and last Step.
+- the tests file contains the 7 tests the website uses before finding the accuracy and veryfing the initial state.
+
 This was the whole process of how I attempted to do the first assignment.`;
 
 export default function BlogPage() {
@@ -134,7 +149,7 @@ export default function BlogPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-2">
               <div className="p-4 bg-slate-950/80 rounded-xl border border-slate-800/80 flex flex-col gap-2">
                 <Rocket className="w-5 h-5 text-emerald-400" />
-                <h2 className="text-xs font-bold text-slate-200">Phase-by-Phase Roadmap</h2>
+                <h2 className="text-xs font-bold text-slate-200">5-Phase Roadmap</h2>
                 <p className="text-[11px] text-slate-400 leading-relaxed">
                   Divided assignment into 5 execution phases with clear TODO milestones.
                 </p>
@@ -142,17 +157,17 @@ export default function BlogPage() {
 
               <div className="p-4 bg-slate-950/80 rounded-xl border border-slate-800/80 flex flex-col gap-2">
                 <Code2 className="w-5 h-5 text-blue-400" />
-                <h2 className="text-xs font-bold text-slate-200">Antigravity & Refactoring</h2>
+                <h2 className="text-xs font-bold text-slate-200">src/ & docs/ Architecture</h2>
                 <p className="text-[11px] text-slate-400 leading-relaxed">
-                  Built app with Antigravity AI, evaluated feedback, and optimized performance.
+                  Decoupled domain, components, hooks, tests, and PRD Section 6 docs.
                 </p>
               </div>
 
               <div className="p-4 bg-slate-950/80 rounded-xl border border-slate-800/80 flex flex-col gap-2">
                 <Brain className="w-5 h-5 text-amber-400" />
-                <h2 className="text-xs font-bold text-slate-200">Vercel Deployment</h2>
+                <h2 className="text-xs font-bold text-slate-200">Vercel Cloud Deployment</h2>
                 <p className="text-[11px] text-slate-400 leading-relaxed">
-                  Deployed to Vercel cloud platform for high performance and scaling.
+                  Built with Antigravity AI, evaluated, optimized, and deployed to Vercel.
                 </p>
               </div>
             </div>
@@ -213,7 +228,7 @@ export default function BlogPage() {
               <textarea
                 value={blogContent}
                 onChange={(e) => setBlogContent(e.target.value)}
-                rows={14}
+                rows={16}
                 className="w-full p-4 bg-slate-950 rounded-xl border border-slate-800 text-slate-200 text-xs sm:text-sm font-mono leading-relaxed focus:outline-none focus:ring-2 focus:ring-emerald-500"
                 placeholder="Write your blog post here..."
                 required
