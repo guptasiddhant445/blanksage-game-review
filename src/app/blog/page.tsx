@@ -5,28 +5,21 @@ import Link from 'next/link';
 import { ArrowLeft, BookOpen, Edit3, Sparkles, CheckCircle2, Rocket, Code2, Brain } from 'lucide-react';
 
 const DEFAULT_TITLE = 'How I Started & Built the BlankSage Game Review Assignment';
-const DEFAULT_CONTENT = `When I received the BlankSage SWE Intern take-home assignment, my goal was clear: recreate the Chess.com Game Review experience with high engineering rigor, generic extensibility, and 100% strict TypeScript.
-
-### 1. Breaking Down the Assignment & PRD
-The assignment asked for a production-oriented game review shell that steps through moves, provides narrative feedback, highlights quality classifications (Best, Great, Blunder), and supports future extensibility. 
+const DEFAULT_CONTENT = `When I received the BlankSage SWE Intern take-home assignment recreate the Chess.com Game Review experience using type script.
+The assignment asked for a game review that provide feedback after each move and classifies each move as best, great, blunder. 
 
 Before writing a single line of UI code, I divided the project into 5 structured phases:
-- **Phase 1**: Core Domain Architecture & Generic Interfaces
-- **Phase 2**: State Machine & Interactive Board Navigation
-- **Phase 3**: Move List, Narrative Feedback & UX Polish
-- **Phase 4**: Testing, Performance & Accessibility
-- **Phase 5**: Process Tracking & Documentation
+- Phase 1: Core Domain Architecture & Generic Interfaces
+- Phase 2: State Machine & Interactive Board Navigation
+- Phase 3: Move List, Narrative Feedback & UX Polish
+- Phase 4: Testing, Performance & Accessibility
+- Phase 5: Process Tracking & Documentation
 
-### 2. Architecture: Generic ReviewEngine
-Instead of hardcoding chess move logic directly into React components, I designed a generic \`ReviewEngine<T>\` state machine backed by a \`ReviewAdapter<T>\` interface. This decoupled board state from review controls and enabled bulletproof state synchronization.
+After the website was made through an app called Antigravity I had created the submission zip folder and submitted that file to chatgpt to evaluate my assignment, check any mistakes and if there was an area for improvement and through that i had changed the code a little bit and made the website a little less laggy.
 
-### 3. Engineering Rigor & Production Standards
-- **Zero \`any\` Types**: Strict TypeScript contracts with zero unsafe casting.
-- **Minimal Dependencies**: Pruned unneeded third-party libraries (\`chess.js\`, \`clsx\`) to maintain a lightweight footprint.
-- **Unit Testing**: Built a comprehensive 8-test suite using Vitest verifying index bounds, navigation, and summary calculations.
-- **Accessibility**: Fully accessible keyboard navigation (arrow keys) and \`aria-live\` announcements.
+then after it was all done I had deployed the website using vercel which is a cloud platform that helps developers build , host and scale fast websites and web applications.
 
-This project was an incredible opportunity to demonstrate full-stack engineering standards, trade-off analysis, and product polish!`;
+This was the whole process of how I attempted to do the first assignment.`;
 
 export default function BlogPage() {
   const [activeTab, setActiveTab] = useState<'read' | 'write'>('read');
@@ -34,7 +27,7 @@ export default function BlogPage() {
   const [blogContent, setBlogContent] = useState(DEFAULT_CONTENT);
   const [savedSuccess, setSavedSuccess] = useState(false);
 
-  // Load saved custom post from localStorage on mount
+  // Load saved custom post from localStorage on mount (or fallback to default)
   useEffect(() => {
     try {
       const savedTitle = localStorage.getItem('blanksage_blog_title');
@@ -149,17 +142,17 @@ export default function BlogPage() {
 
               <div className="p-4 bg-slate-950/80 rounded-xl border border-slate-800/80 flex flex-col gap-2">
                 <Code2 className="w-5 h-5 text-blue-400" />
-                <h2 className="text-xs font-bold text-slate-200">Generic Domain Engine</h2>
+                <h2 className="text-xs font-bold text-slate-200">Antigravity & Refactoring</h2>
                 <p className="text-[11px] text-slate-400 leading-relaxed">
-                  Decoupled review engine architecture supporting generic domain adapters.
+                  Built app with Antigravity AI, evaluated feedback, and optimized performance.
                 </p>
               </div>
 
               <div className="p-4 bg-slate-950/80 rounded-xl border border-slate-800/80 flex flex-col gap-2">
                 <Brain className="w-5 h-5 text-amber-400" />
-                <h2 className="text-xs font-bold text-slate-200">Production Engineering</h2>
+                <h2 className="text-xs font-bold text-slate-200">Vercel Deployment</h2>
                 <p className="text-[11px] text-slate-400 leading-relaxed">
-                  Zero <code className="text-emerald-300 font-mono">any</code> types, Vitest test suite, and full accessibility.
+                  Deployed to Vercel cloud platform for high performance and scaling.
                 </p>
               </div>
             </div>
