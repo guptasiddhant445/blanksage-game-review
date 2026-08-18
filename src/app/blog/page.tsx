@@ -1,14 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, BookOpen, Edit3, Sparkles, CheckCircle2, Rocket, Code2, Brain } from 'lucide-react';
 
-export default function BlogPage() {
-  const [activeTab, setActiveTab] = useState<'read' | 'write'>('read');
-  const [blogTitle, setBlogTitle] = useState('How I Started & Built the BlankSage Game Review Assignment');
-  const [blogContent, setBlogContent] = useState(
-    `When I received the BlankSage SWE Intern take-home assignment, my goal was clear: recreate the Chess.com Game Review experience with high engineering rigor, generic extensibility, and 100% strict TypeScript.
+const DEFAULT_TITLE = 'How I Started & Built the BlankSage Game Review Assignment';
+const DEFAULT_CONTENT = `When I received the BlankSage SWE Intern take-home assignment, my goal was clear: recreate the Chess.com Game Review experience with high engineering rigor, generic extensibility, and 100% strict TypeScript.
 
 ### 1. Breaking Down the Assignment & PRD
 The assignment asked for a production-oriented game review shell that steps through moves, provides narrative feedback, highlights quality classifications (Best, Great, Blunder), and supports future extensibility. 
@@ -29,15 +26,48 @@ Instead of hardcoding chess move logic directly into React components, I designe
 - **Unit Testing**: Built a comprehensive 8-test suite using Vitest verifying index bounds, navigation, and summary calculations.
 - **Accessibility**: Fully accessible keyboard navigation (arrow keys) and \`aria-live\` announcements.
 
-This project was an incredible opportunity to demonstrate full-stack engineering standards, trade-off analysis, and product polish!`
-  );
+This project was an incredible opportunity to demonstrate full-stack engineering standards, trade-off analysis, and product polish!`;
 
+export default function BlogPage() {
+  const [activeTab, setActiveTab] = useState<'read' | 'write'>('read');
+  const [blogTitle, setBlogTitle] = useState(DEFAULT_TITLE);
+  const [blogContent, setBlogContent] = useState(DEFAULT_CONTENT);
   const [savedSuccess, setSavedSuccess] = useState(false);
+
+  // Load saved custom post from localStorage on mount
+  useEffect(() => {
+    try {
+      const savedTitle = localStorage.getItem('blanksage_blog_title');
+      const savedContent = localStorage.getItem('blanksage_blog_content');
+      if (savedTitle) setBlogTitle(savedTitle);
+      if (savedContent) setBlogContent(savedContent);
+    } catch {
+      // Local storage disabled or unavailable
+    }
+  }, []);
 
   const handleSaveBlog = (e: React.FormEvent) => {
     e.preventDefault();
+    try {
+      localStorage.setItem('blanksage_blog_title', blogTitle);
+      localStorage.setItem('blanksage_blog_content', blogContent);
+    } catch {
+      // Local storage unavailable
+    }
     setSavedSuccess(true);
+    setActiveTab('read');
     setTimeout(() => setSavedSuccess(false), 3000);
+  };
+
+  const handleResetDefault = () => {
+    setBlogTitle(DEFAULT_TITLE);
+    setBlogContent(DEFAULT_CONTENT);
+    try {
+      localStorage.removeItem('blanksage_blog_title');
+      localStorage.removeItem('blanksage_blog_content');
+    } catch {
+      // Ignore
+    }
   };
 
   return (
@@ -84,9 +114,16 @@ This project was an incredible opportunity to demonstrate full-stack engineering
         {activeTab === 'read' ? (
           <article className="flex flex-col p-6 sm:p-8 bg-slate-900/90 rounded-2xl border border-slate-800 shadow-2xl gap-6">
             <div className="flex flex-col gap-2 border-b border-slate-800 pb-6">
-              <div className="flex items-center gap-2 text-xs font-mono text-emerald-400">
-                <Sparkles className="w-4 h-4 text-emerald-400" />
-                <span>BlankSage SWE Internship Take-Home Assignment</span>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-xs font-mono text-emerald-400">
+                  <Sparkles className="w-4 h-4 text-emerald-400" />
+                  <span>BlankSage SWE Internship Take-Home Assignment</span>
+                </div>
+                {savedSuccess && (
+                  <span className="flex items-center gap-1.5 text-xs text-emerald-400 font-semibold bg-emerald-950/60 px-3 py-1 rounded-md border border-emerald-800/40 animate-pulse">
+                    <CheckCircle2 className="w-4 h-4" /> Published & Saved!
+                  </span>
+                )}
               </div>
               <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight leading-tight">
                 {blogTitle}
@@ -151,11 +188,13 @@ This project was an incredible opportunity to demonstrate full-stack engineering
                 <Edit3 className="w-5 h-5 text-emerald-400" />
                 <h2 className="text-lg font-bold text-white">Write / Edit Blog Post</h2>
               </div>
-              {savedSuccess && (
-                <span className="flex items-center gap-1.5 text-xs text-emerald-400 font-semibold bg-emerald-950/60 px-3 py-1 rounded-md border border-emerald-800/40">
-                  <CheckCircle2 className="w-4 h-4" /> Published Successfully!
-                </span>
-              )}
+              <button
+                type="button"
+                onClick={handleResetDefault}
+                className="text-xs text-slate-400 hover:text-slate-200 font-mono underline"
+              >
+                Reset to Default
+              </button>
             </div>
 
             {/* Blog Title Input */}
